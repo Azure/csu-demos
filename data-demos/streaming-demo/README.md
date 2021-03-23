@@ -1,12 +1,18 @@
-# streaming-demo
+# Summary
 
 This repository contains assets for quickly building out an end-to-end streaming demo that can serve as a foundation for a PoC or MVP. Included in this repository is an ARM template for deploying the key resources in Azure and a data generator that simulates device telemetry data. Below is more detailed documentation for configuring resources after they have been deployed in Azure.
 
-# Solution Architecture
+<br></br>
+## Solution Architecture
 
 ![img](https://github.com/GLRAzure/streaming-demo/blob/master/img/stream-architecture.png)
 
-# Provision and configure resources using ARM template
+<br></br>
+<br></br>
+# Provision and configure resources 
+
+<br></br>
+## Deploy resources using ARM template
 
 From the Azure portal, [deploy resources from provided template](https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/quickstart-create-templates-use-the-portal#edit-and-deploy-the-template). 
 	
@@ -16,17 +22,27 @@ After deploying the template, you should see the following resources:
 
 ![img](https://github.com/GLRAzure/streaming-demo/blob/master/img/template-resources-01.png)
 
-For each of the provisioned resources, configure the following:
+<br></br>
+## For each of the provisioned resources, configure the following:
 
+:heavy_check_mark: Azure Storage - created container
+:heavy_check_mark: IoT Hub - provision devices and create consumer groups
+:heavy_check_mark: Azure Key Vault - store IoT Hub EH endpoint
+:heavy_check_mark: Azure SQL DB - configure a table to land data
+:heavy_check_mark: Azure Stream Analytics - create input, output, and query for managing data stream
+:heavy_check_mark: Azure Databricks - create secret scope and load notebook
+
+<br></br>
 ## Storage Account
 
-* Create a container called "demo"
+:heavy_check_mark: Create a container called "demo" to store forwarded events from IoT Hub.
       
-For help creating a container in a storage account, reference the [Microsoft documentation here](https://docs.microsoft.com/en-us/azure/storage/blobs/storage-quickstart-blobs-portal#create-a-container).
-      
+For help creating a container in a storage account, reference the [Microsoft documentation here](https://docs.microsoft.com/en-us/azure/storage/blobs/storage-quickstart-blobs-portal#create-a-container)
+
+<br></br>
 ## IoT Hub
 			
-* Provision a minimum of two devices and Primary Connection String
+:heavy_check_mark: Provision a minimum of two devices and Primary Connection String
       
 ![img](https://github.com/GLRAzure/streaming-demo/blob/master/img/iot-devices.png)
 
@@ -38,21 +54,26 @@ Your concatenated connection strings will look like this:
 
 `HostName=<IOT-HUB-NAME>.azure-devices.net;DeviceId=<DEVICE-ID>;SharedAccessKey=<KEY>,HostName=<IOT-HUB-NAME>.azure-devices.net;DeviceId=<DEVICE-ID>;SharedAccessKey=<KEY>`
       
-* Create a Consumer Group (example below is "databricks") in Built-in Endpoints
+:heavy_check_mark: Create a Consumer Group (example below is "databricks") in Built-in Endpoints
 
 ![img](https://github.com/GLRAzure/streaming-demo/blob/master/img/consumergroup.png)
 
-* Copy Event Hub compatible endpoint
-      
+:heavy_check_mark: Copy Event Hub compatible endpoint
+
+<br></br>
+## Azure Key Vault
+
+:heavy_check_mark: Add an Access Policy to Azure Key Vault. Refer to [this link](https://docs.microsoft.com/en-us/azure/key-vault/general/assign-access-policy-portal) for assistance.
+
 ![img](https://github.com/GLRAzure/streaming-demo/blob/master/img/iot-event-hub.png)
 
-Add this Event Hub compatible endpoint to your Key Vault with the secret name `eventhubsreader`.
+:heavy_check_mark: Add this Event Hub compatible endpoint to your Key Vault with the secret name `eventhubsreader`.
 
 After adding this Secret, your Key Vault will look similar to this:
 
 ![img](https://github.com/GLRAzure/streaming-demo/blob/master/img/kv-secret.png)
       
-* Add route(s)
+:heavy_check_mark: Add route(s)
 
 Add two routes:  
 
@@ -67,14 +88,15 @@ First, add a custom Storage endpoint and configure the following options.
 After adding both routes, you should see something similar to in your Message routing.
 
 ![img](https://github.com/GLRAzure/streaming-demo/blob/master/img/iot-routes.png)
-      
+
+<br></br>
 ## Azure SQL DB
     
-* If necessary, add your client IP Address to the server firewall rules and open the Query Editor
+*If necessary, add your client IP Address to the server firewall rules and open the Query Editor*
 
 Please note that the Azure SQL Database is provisioned as serverless to help minimize costs. You may experience a brief delay when first interacting with the resource as it warms up.
 
-* Create table using this script:
+:heavy_check_mark: Create table using this script:
 
 ```
 CREATE TABLE [dbo].[sensordata](
@@ -85,16 +107,17 @@ CREATE TABLE [dbo].[sensordata](
 	[TimeReceived] [datetime2](7) NOT NULL
 )
 ```
-      
+
+<br></br>
 ## Stream Analytics job
     
-* Input
+:heavy_check_mark: Create input stream
 
 Add an input that points to the device telemetry from IoT Hub.
 
 ![img](https://github.com/GLRAzure/streaming-demo/blob/master/img/sa-input.png)
 
-* Output
+:heavy_check_mark: Create output stream
 
 Add two outputs: one that points to a Power BI streaming dataset and another that points to an Azure SQL DB.
 
@@ -102,15 +125,16 @@ Add two outputs: one that points to a Power BI streaming dataset and another tha
 
 ![img](https://github.com/GLRAzure/streaming-demo/blob/master/img/sa-sql-output.png)
 
-* Query
+:heavy_check_mark: Add query
 
 Add the following query to link the input with the two outputs:
 
 Query location: `Stream Analytics/sademo/Transformation.asaql`
 
+<br></br>
 ## Run the IoTDeviceSimulator
 	
-* Set Environment Variable with device connection strings (concat with ",")
+:heavy_check_mark: Set Environment Variable with device connection strings (concat with ",")
 
 Create a new system Environment Variable called: `IOTHUB_DEVICE_CONN_STRING`
 
@@ -118,7 +142,7 @@ For it's value, add the concatenated connection strings for each of the devices 
 
 `HostName=<IOT-HUB-NAME>.azure-devices.net;DeviceId=<DEVICE-ID>;SharedAccessKey=<KEY>,HostName=<IOT-HUB-NAME>.azure-devices.net;DeviceId=<DEVICE-ID>;SharedAccessKey=<KEY>`
 
-* Run the Device simulator
+:heavy_check_mark: Run the Device simulator
 
 Use `dotnet build` and then `dotnet run` from the `IoTDeviceSimulator` directory.
 
@@ -126,11 +150,12 @@ You should see output similar to this after running the device simulator:
 
 ![img](https://github.com/GLRAzure/streaming-demo/blob/master/img/device-output.png)
 
-* Return to the azure portal and your Streaming Job and start it.
-      
-## Databricks
+:heavy_check_mark: Return to the azure portal and your Streaming Job and start it.
 
-* Create a Key Vault-backed secret scope
+<br></br>
+## Databricks (*optional*)
+
+:heavy_check_mark: Create a Key Vault-backed secret scope
 
 
 Follow the instructions located here to [add a secret scope backed by Azure Key Vault](https://docs.microsoft.com/en-us/azure/databricks/security/secrets/secret-scopes#--create-an-azure-key-vault-backed-secret-scope).  (Note: Manage Principal in the secret scope must be Creator, and you'll need a databricks premium account to do so. A Standard account will force you hardcode the secret in the code)
@@ -150,8 +175,6 @@ Add this Maven coordinate for compatibility with IoT Hub: `com.microsoft.azure:a
 Import the DBC archive notebook located at this location: `notebooks/Streaming Demo.dbc`
 
 After importing the notebook, run the cells in this notebook, be sure the device simulator is up-and-running, sending data to the Event Hub.
-			
-
 
 Once you are seeing this output, go back to the Databricks notebook and run all of the cells in the notebook.
 
@@ -165,4 +188,4 @@ Open PowerBI, you'll notice the streamingdata Dataset in the left nav.  Add the 
 
 ![img](https://github.com/GLRAzure/streaming-demo/blob/master/img/PBIMockStream.png)
 
-## Once you create the Streaming Dashboard, and verify data is being populated in your storage account and SQL DB, the exercise is complete!
+### Once you create the Streaming Dashboard, and verify data is being populated in your storage account and SQL DB, the exercise is complete!
