@@ -1,4 +1,4 @@
-Additional contributors: @stevedem, @howardginsburg, @mdowns75
+Contributors: @stevedem, @howardginsburg, @mdowns75
 <br></br>
 # Summary
 
