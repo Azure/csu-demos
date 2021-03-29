@@ -1,3 +1,5 @@
+### Additional contributors: @stevedem, @howardginsburg, @mdowns75
+<br></br>
 # Summary
 
 This repository contains assets for quickly building out an end-to-end streaming demo that can serve as a foundation for a PoC or MVP. Included in this repository is an ARM template for deploying the key resources in Azure and a data generator that simulates device telemetry data. Below is more detailed documentation for configuring resources after they have been deployed in Azure.
@@ -26,17 +28,23 @@ After deploying the template, you should see the following resources:
 ## For each of the provisioned resources, configure the following:
 
 :heavy_check_mark: Azure Storage - created container
+
 :heavy_check_mark: IoT Hub - provision devices and create consumer groups
+
 :heavy_check_mark: Azure Key Vault - store IoT Hub EH endpoint
+
 :heavy_check_mark: Azure SQL DB - configure a table to land data
+
 :heavy_check_mark: Azure Stream Analytics - create input, output, and query for managing data stream
+
 :heavy_check_mark: Azure Databricks - create secret scope and load notebook
+
 
 <br></br>
 ## Storage Account
 
 :heavy_check_mark: Create a container called "demo" to store forwarded events from IoT Hub.
-      
+
 For help creating a container in a storage account, reference the [Microsoft documentation here](https://docs.microsoft.com/en-us/azure/storage/blobs/storage-quickstart-blobs-portal#create-a-container)
 
 <br></br>
@@ -63,7 +71,9 @@ Your concatenated connection strings will look like this:
 <br></br>
 ## Azure Key Vault
 
+
 :heavy_check_mark: Add an Access Policy to Azure Key Vault. Refer to [this link](https://docs.microsoft.com/en-us/azure/key-vault/general/assign-access-policy-portal) for assistance.
+
 
 ![img](https://github.com/GLRAzure/streaming-demo/blob/master/img/iot-event-hub.png)
 
